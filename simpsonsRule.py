@@ -1,16 +1,46 @@
-import openpyxl
 import math
+import sys
+
 
 def main():
 
-    #Given:
-    a = 0
-    b = 5
+    sys.stdout = open('simpsonsRuleOutput.doc', 'w')
+
+    #Given values:
+    a = float(0)
+    b = float(5)
     subdivisions = [2, 4, 8, 16, 32, 64, 128, 256]
 
+    correctAnswer = (250 * math.sqrt(5)) / 7
+    print() #newline
+
+    count = 0
+
+    absRatio = 0
+    relRatio = 0
+
+    absErrors = []
+    relErrors = []
+
+    print('| {:>5} | {:>25} | {:>25} | {:>25} | {:>25} | {:>25} |\n'.format("n", "estimation", "absolute error", "relative error", "ratio of abs. error", "ratio of rel. error"))
     for n in subdivisions:
-        print(n)
-        simpsonsRule(n, a, b)
+
+        estimation = simpsonsRule(n, a, b)
+        absoluteError = correctAnswer - estimation
+        relativeError = (correctAnswer - estimation) / correctAnswer
+
+        absErrors.append(absoluteError)
+        relErrors.append(relativeError)
+    
+        if(count!=0):
+            absRatio = absErrors[count] / absErrors[count-1]
+            relRatio = relErrors[count] / relErrors[count-1]
+
+            print('| {:>5} | {:>25} | {:>25} | {:>25} | {:>25} | {:>25} |'.format(n, estimation, absoluteError, relativeError, absRatio, relRatio))
+        else:
+            print('| {:>5} | {:>25} | {:>25} | {:>25} | {:>25} | {:>25} |'.format(n, estimation, absoluteError, relativeError, "N/A", "N/A"))
+        count += 1
+    print() #newline
 
 def changeInX(n, a, b):
     return (b-a) / n
@@ -31,17 +61,14 @@ def simpsonsRule(n, a, b):
 
         if(x==0):
             sum+=givenFunction(x_a)
-        elif(((x%2)==1) and (x != n)):
+        elif(((x%2)==1) and (x != n)): #odd
             sum+=givenFunction(x_a) * 4
-        elif(((x%2)==0) and (x != n)):
+        elif(((x%2)==0) and (x != n)): #even
             sum+=givenFunction(x_a) * 2
         else:
             sum+=givenFunction(x_a)
-
         x_a += deltaX
-
-    print(sum * coefficient)
+    return(sum * coefficient)
 
 if __name__ == "__main__":
-    # execute only if run as a script
     main()
