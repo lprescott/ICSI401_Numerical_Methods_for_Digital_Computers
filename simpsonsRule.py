@@ -8,10 +8,10 @@ def main():
 
     #Given values:
     a = float(0)
-    b = float(5)
+    b = float(1)
     subdivisions = [2, 4, 8, 16, 32, 64, 128, 256]
 
-    correctAnswer = (250 * math.sqrt(5)) / 7
+    correctAnswer = 2 / 7
     print() #newline
 
     count = 0
@@ -22,7 +22,7 @@ def main():
     absErrors = []
     relErrors = []
 
-    print('| {:>5} | {:>25} | {:>25} | {:>25} | {:>25} | {:>25} |\n'.format("n", "estimation", "absolute error", "relative error", "ratio of abs. error", "ratio of rel. error"))
+    print('| {:>5} | {:>25} | {:>25} | {:>25} | {:>25} |\n'.format("n", "estimation", "absolute error", "relative error", "ratio of error"))
     for n in subdivisions:
 
         estimation = simpsonsRule(n, a, b)
@@ -36,9 +36,9 @@ def main():
             absRatio = absErrors[count] / absErrors[count-1]
             relRatio = relErrors[count] / relErrors[count-1]
 
-            print('| {:>5} | {:>25} | {:>25} | {:>25} | {:>25} | {:>25} |'.format(n, estimation, absoluteError, relativeError, absRatio, relRatio))
+            print('| {:>5} | {:>25} | {:>25} | {:>25} | {:>25} |'.format(n, estimation, absoluteError, relativeError, relRatio))
         else:
-            print('| {:>5} | {:>25} | {:>25} | {:>25} | {:>25} | {:>25} |'.format(n, estimation, absoluteError, relativeError, "N/A", "N/A"))
+            print('| {:>5} | {:>25} | {:>25} | {:>25} | {:>25} |'.format(n, estimation, absoluteError, relativeError, "N/A"))
         count += 1
     print() #newline
 
