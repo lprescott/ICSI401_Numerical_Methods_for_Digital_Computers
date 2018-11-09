@@ -80,6 +80,7 @@ def main():
         print("Failed!")
     '''
 
+#This functions finds the jacobian of the given system as a matrix
 def jacobian(x_k, y_k):
     #j_row,column
     j_11 = 2 * x_k + math.pow(y_k, 3)
@@ -88,21 +89,21 @@ def jacobian(x_k, y_k):
     j_22 = 3 * math.pow(x_k, 2) - 3 * math.pow(y_k, 2)
     return [[j_11, j_12],[j_21, j_22]]
 
+#This function finds the negated system as a matrix
 def givenSystem(x_k, y_k):
     #p_row,column
     p_11 = -1 * ( math.pow(x_k,2) + x_k * math.pow(y_k, 3) - 9 )
     p_21 = -1 * ( 3 * math.pow(x_k, 2) * y_k - math.pow(y_k, 3) - 4 )
     return [[p_11], [p_21]]
 
+#For Tests
+#This prints a two dimensional array
 def printMatrix(matrix):
     for row in matrix:
         for val in row:
             print('{:<20}'.format(val), end=' ')
         print()
     print()
-
-def error(x_k1, x_k):
-    return x_k1 - x_k
             
 if __name__ == "__main__":
     main() 
