@@ -77,12 +77,13 @@ def main():
         #increment count
         count += 1
 
-    #This checkes if the found Ax=b matrix equation checks.
+    #This checks if the found Ax=b matrix equation checks.
     if(np.allclose(np.dot(A_np, x), b_np)):
         print("Ax=b checks!")
     else:
         print("Ax=b fails!")
     
+    #This checks if the error tolerance checks
     if(difference < error): 
         print("|x_1 - x_k| < 10e-10 checks!")
     else:
