@@ -12,7 +12,6 @@ def main():
     subdivisions = [2, 4, 8, 16, 32, 64, 128, 256]
 
     correctAnswer = 2 / 7
-    print() #newline
 
     count = 0
 
@@ -40,7 +39,6 @@ def main():
         else:
             print('| {:>5} | {:>25} | {:>25} | {:>25} | {:>25} |'.format(n, estimation, absoluteError, relativeError, "N/A"))
         count += 1
-    print() #newline
 
 def changeInX(n, a, b):
     return (b-a) / n

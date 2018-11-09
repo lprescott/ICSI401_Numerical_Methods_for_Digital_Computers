@@ -8,6 +8,9 @@ import sys
 # This program uses Gaussian Elimination to solve the given non-linear system of equations using Newton's method.
 def main():
 
+    #Redirect stdout to a document
+    sys.stdout = open('solvedSystem.doc', 'w')
+
     #Given functions:
     #f(x,y) = x^2+xy^3=9  \
     #g(x,y) = 3x^2-y^3=4  / p(x,y)
@@ -20,6 +23,7 @@ def main():
     initialGuess = [2.98, 0.15]
     x_k = initialGuess[0]
     y_k = initialGuess[1]
+
     error = float(10) * math.pow(10, -12)
 
     #Default the values of x for the next iteration.
@@ -27,7 +31,7 @@ def main():
     y_k1=0
 
     #Print the title bar
-    print('| {:>5} | {:>25} | {:>25} | {:>25} | {:>25} | {:>25} |'.format("k", "x_k", "y_k", "x_k+1", "y_k+1", "x_k+1 - x_k"))
+    print('| {:>5} | {:>22} | {:>22} | {:>22} | {:>22} | {:>22} |\n'.format("k", "x_k", "y_k", "x_k+1", "y_k+1", "x_k+1 - x_k"))
 
     #Set difference, to use as a flag, as a arbitrarily high number
     difference = 100
@@ -65,20 +69,25 @@ def main():
         y_k1 = y_k + np.linalg.solve(np.array(jacobian(x_k, y_k)), np.array(givenSystem(x_k, y_k)))[1][0]
 
         #Calculate the difference between x_k and x_k+1
-        difference = x_k1 - x_k
+        difference = math.fabs(x_k1 - x_k)
 
         #print table row
-        print('| {:>5} | {:>25} | {:>25} | {:>25} | {:>25} | {:>25} |'.format(count, x_k, y_k, x_k1, y_k1, difference))
+        print('| {:>5} | {:>22} | {:>22} | {:>22} | {:>22} | {:>22} |'.format(count, x_k, y_k, x_k1, y_k1, difference))
 
         #increment count
         count += 1
 
-    ''' #This checkes if the found Ax=b matrix equation checks.
+    #This checkes if the found Ax=b matrix equation checks.
     if(np.allclose(np.dot(A_np, x), b_np)):
-        print("Checked!")
+        print("Ax=b checks!")
     else:
-        print("Failed!")
-    '''
+        print("Ax=b fails!")
+    
+    if(difference < error): 
+        print("|x_1 - x_k| < 10e-10 checks!")
+    else:
+        print("|x_1 - x_k| < 10e-10 fails!")
+    
 
 #This functions finds the jacobian of the given system as a matrix
 def jacobian(x_k, y_k):
