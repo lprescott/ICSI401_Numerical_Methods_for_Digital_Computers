@@ -20,7 +20,7 @@ def main():
     #| 6xy    3x^2-3y^2 |
 
     #Other given info:
-    initialGuess = [2.98, 0.15]
+    initialGuess = [float(2.98), float(0.15)]
     x_k = initialGuess[0]
     y_k = initialGuess[1]
 
@@ -28,29 +28,35 @@ def main():
 
     #Default the values of x for the next iteration.
     x_k1 = 0
-    y_k1=0
+    y_k1 = 0
 
     #Print the title bar
     print('| {:>5} | {:>22} | {:>22} | {:>22} | {:>22} | {:>22} |\n'.format("k", "x_k", "y_k", "x_k+1", "y_k+1", "x_k+1 - x_k"))
 
-    #Set difference, to use as a flag, as a arbitrarily high number
+    #Set the difference flag to a arbitrarily high number 
     difference = 100
 
-    #For the given number of iterations
-    for count in range(0, 4):
-        
-        #For every iteration except the first
-        if(count!=0):
+    count = 0
 
+    #While the difference is greater than the given error
+    while(difference > error):
+
+        #on the first iteration
+        if(count == 0):
+            #calculate x_k+1 and y_k+1, leave x_k and y_k alone
+            x_k1 = x_k + np.linalg.solve(np.array(jacobian(x_k, y_k)), np.array(givenSystem(x_k, y_k)))[0][0]
+            y_k1 = y_k + np.linalg.solve(np.array(jacobian(x_k, y_k)), np.array(givenSystem(x_k, y_k)))[1][0]
+        #on all other iterations
+        else:
             #A is the matrix A, the jacobian of the given system
             A = jacobian(x_k, y_k)
             #A_np is the numpy array equivalent
-            A_np = np.array(A)
+            A_np = np.array(A, np.float64)
 
             #b is the matrix b, the negated given system
             b = givenSystem(x_k, y_k)
             #b_np is the numpy array equivalent
-            b_np = np.array(b)
+            b_np = np.array(b, np.float64)
 
             #Call numpy's (np) method linalg to solve a linear matrix equation pass A and B
             x = np.linalg.solve(A_np, b_np)
@@ -63,10 +69,9 @@ def main():
             x_k += deltaX
             y_k += deltaY
 
-        #On all iterations
-        #Find the next values for x and y for printing of table
-        x_k1 = x_k + np.linalg.solve(np.array(jacobian(x_k, y_k)), np.array(givenSystem(x_k, y_k)))[0][0]
-        y_k1 = y_k + np.linalg.solve(np.array(jacobian(x_k, y_k)), np.array(givenSystem(x_k, y_k)))[1][0]
+            #Find the next values for x and y for printing of table
+            x_k1 = x_k + np.linalg.solve(np.array(jacobian(x_k, y_k)), np.array(givenSystem(x_k, y_k)))[0][0]
+            y_k1 = y_k + np.linalg.solve(np.array(jacobian(x_k, y_k)), np.array(givenSystem(x_k, y_k)))[1][0]
 
         #Calculate the difference between x_k and x_k+1
         difference = math.fabs(x_k1 - x_k)
@@ -88,7 +93,6 @@ def main():
         print("|x_1 - x_k| < 10e-10 checks!")
     else:
         print("|x_1 - x_k| < 10e-10 fails!")
-    
 
 #This functions finds the jacobian of the given system as a matrix
 def jacobian(x_k, y_k):

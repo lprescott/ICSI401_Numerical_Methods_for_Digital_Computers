@@ -15,6 +15,8 @@ def main():
 
     count = 0
 
+    estimations = []
+
     absRatio = 0
     relRatio = 0
 
@@ -25,6 +27,8 @@ def main():
     for n in subdivisions:
 
         estimation = simpsonsRule(n, a, b)
+        estimations.append(estimation)
+
         absoluteError = correctAnswer - estimation
         relativeError = (correctAnswer - estimation) / correctAnswer
 
@@ -34,10 +38,11 @@ def main():
         if(count!=0):
             absRatio = absErrors[count] / absErrors[count-1]
             relRatio = relErrors[count] / relErrors[count-1]
+            errorRatio = estimations[count-1] / estimations[count]
 
-            print('| {:>5} | {:>25} | {:>25} | {:>25} | {:>25} |'.format(n, estimation, absoluteError, relativeError, relRatio))
+            print('| {:>5} | {:>25} | {:>25} | {:>25} | {:>25} |'.format(n, estimation, absoluteError, relativeError, errorRatio))
         else:
-            print('| {:>5} | {:>25} | {:>25} | {:>25} | {:>25} |'.format(n, estimation, absoluteError, relativeError, "N/A"))
+            print('| {:>5} | {:>25} | {:>25} | {:>25} | {:>25} |'.format(n, estimation, absoluteError, relativeError, "0"))
         count += 1
 
 def changeInX(n, a, b):
