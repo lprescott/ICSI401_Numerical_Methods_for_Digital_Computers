@@ -12,10 +12,16 @@ Output:
 #libraries used
 import math
 import numpy as np
+import sys
 
 def main():
+
     #Matrix A (Given)
-    A = [[4,1,1,0,0],[-1,-3,1,1,0],[2,1,5,-1,-1],[-1,-1,-1,4,0],[0,2,-1,1,4]]
+    A = [[4,1,1,0,0],
+    [-1,-3,1,1,0],
+    [2,1,5,-1,-1],
+    [-1,-1,-1,4,0],
+    [0,2,-1,1,4]]
 
     #Initial guess of all zeros
     x = [[0],[0],[0],[0],[0]]
@@ -39,10 +45,19 @@ def main():
     x_np = np.array(x, np.float64)
 
     #print title bar
-    print('| {:>5} | {:>10} | {:>10} | {:>10} | {:>10} | {:>10} | {:>10} | {:>10} | {:>10} | {:>10} | {:>10} |\n'.format("k", "x_1", "x_2", "x_3", "x_4", "x_5", "x_1 error", "x_2 error", "x_3 error", "x_4 error", "x_5 error"))
+    print('{:>3} | {:>20} | {:>20} | {:>20} | {:>20} | {:>20} | {:>25}\n'.format("k", "x_1", "x_2", "x_3", "x_4", "x_5", "error, ||x - XO||"))
+
+    #count
+    k = 0
+
+    #print iteration
+    print('{:>3} | {:>20} | {:>20} | {:>20} | {:>20} | {:>20} | {:>25}'.format(k, x[0][0], x[1][0], x[2][0],  x[3][0],  x[4][0], "N/A"))
 
 
-    for k in range(0, N):
+    for k in range(1, N):
+
+        x_np_previous = np.array(x, np.float64)
+
         #x_1
         x[0][0] = (1/A[0][0]) * (b[0][0] - A[0][1] * x[1][0] - A[0][2] * x[2][0] - A[0][3] * x[3][0] - A[0][4] * x[4][0])
         #x_2
@@ -56,19 +71,21 @@ def main():
 
         #x_np is the numpy array equivalent
         x_np = np.array(x, np.float64)
-
-        #error is the distance the current solution is from zero
-        error = np.dot(A_np, x_np) - b_np
-
+        
+        #error is the norm of the difference of the iterative solutions 
+        error = np.linalg.norm(np.subtract(x_np, x_np_previous))
 
         #print iteration
-        print('| {:>5} | {:>10} | {:>10} | {:>10} | {:>10} | {:>10} | {:>10} | {:>10} | {:>10} | {:>10} | {:>10} |\n'.format(k, round(x[0][0], 10), round(x[1][0], 10), round(x[2][0], 10), round(x[3][0], 10), round(x[4][0], 10), round(error[0][0], 10), round(error[1][0], 10), round(error[2][0], 10), round(error[3][0], 10), round(error[4][0], 10)))
+        print('{:>3} | {:>20} | {:>20} | {:>20} | {:>20} | {:>20} | {:>25}'.format(k, x[0][0], x[1][0], x[2][0], x[3][0], x[4][0], error))
 
-        #break out of loop if needed
-        
-        if((abs(error[0][0]) < TOL) and (abs(error[1][0]) < TOL) and (abs(error[2][0]) < TOL) and (abs(error[3][0]) < TOL) and (abs(error[4][0]) < TOL)):
+        #break out of loop when error tolerance met needed
+        if(error < TOL):
             break
 
+    if(error < TOL):  
+        print("\nError tolerance: \"{} < {}\" checks!".format(error, TOL))
+    else:
+        print("\nError tolerance: \"{} < {}\" fails!".format(error, TOL))
  
 
 if __name__ == "__main__":
